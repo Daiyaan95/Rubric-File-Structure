@@ -1,0 +1,15 @@
+| PROJECT             | COMPONENT          | FILE NAMES                                                                                                                                                                              |
+|---------------------|--------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Consumer mobile app | Login              | eg. Rubric-file-structure\consumer-mobile-app\src\app\home 
+| Consumer mobile app | Registration       | eg. Rubric-file-structure\consumer-mobile-app\src\app\registration 
+| Consumer mobile app | User Profile       | eg. Rubric-file-structure\consumer-mobile-app\src\app\profile                 |
+| Consumer mobile app | List of Properties | eg. Rubric-file-structure\consumer-mobile-app\src\app\explore     |
+| Provider mobile app | Login              | eg. Rubric-file-structure\provider-mobile-app\src\app\login           |
+| Provider mobile app | Registration       | eg. Rubric-file-structure\provider-mobile-app\src\app\registration 
+| Provider mobile app | User Profile       | eg. N/A
+| Provider mobile app | List of Properties | eg. N/A
+| Provider mobile app | List of Bookings   | eg. N/A
+| Admin Panel         | Users              | eg. N/A         |
+| Admin Panel         | Bookings           | eg. N/A |
+| API                 | Users              | eg. Rubric-file-structure\API\src\api\users-routes & eg. Rubric-file-structure\API\src\models\users-models &  Rubric-file-structure\API\src\api\provider-routes &  Rubric-file-structure\API\src\models\provider-models  &  Rubric-file-structure\API\src\services\auth-service &  Rubric-file-structure\API\src\ services\provider-auth-service                                                       |
+| API                 | Bookings           | eg. Rubric-file-structure\API\src\api\bookings-routes & eg. Rubric-file-structure\API\src\models\booking-model                                                           |
