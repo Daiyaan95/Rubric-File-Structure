@@ -1,91 +1,92 @@
 var mysqlConn = require("../database/database");
-module.exports = class Booking {
+module.exports = class Provider {
+ 
+  constructor(provider) {
+    this.name = provider.name;
+    this.email = provider.email;
+    this.password = provider.password;
+    this.role = provider.role;
+  }
 
-    constructor( newFirstName, newLastName,  newEmail, newPassword, newDateCreated) {
-      this.id;
-      this.firstName = newFirstName;
-      this.lastName = newLastName;
-      this.email = newEmail;
-      this.password = newPassword;
-      this.dateCreated = newDateCreated;
-    
-    }
-
-    getAll(){
-        return new Promise((resolve, reject) => {
-          mysqlConn.query("Select * from provider", function(err, res) {
-              if (err) {
-                console.log("error: ", err);
-                reject(err);
-              } else {
-                console.log("Providers : ", res);
-                resolve(res);
-              }
-            });
-          });
-      }
-
-      create(newProvider){
-        return new Promise((resolve, reject) => {
-          mysqlConn.query("INSERT INTO provider set ?", newProvider, function(err, res) {
-              if (err) {
-                console.log("error: ", err);
-                reject(err);
-              } else {
-                console.log(res);
-                resolve(res);
-              }
-            });
-          });
-      }
-  
-      getByID(providerID){
-        return new Promise((resolve, reject) => {
-          mysqlConn.query("Select * from provider where id = ?", providerID, function(
-              err,
-              res
-            ) {
-              if (err) {
-                console.log("error: ", err);
-                reject(err);
-              } else {
-                resolve(res);
-              }
-            });
-          });
-      }
-  
-      updateByID(providerID, provider){
-        return new Promise((resolve, reject) => {
-          mysqlConn.query(
-            "UPDATE provider SET firstName = ?, lastName = ?, email = ?, password = ?, dateCreated = ? WHERE id = ?",
-            [provider.firstName, provider.lastName, provider.email, provider.password, provider.dateCreated, providerID],
-              function(err, res) {
-                if (err) {
-                  console.log("error: ", err);
-                  reject(err);
-                } else {
-                  resolve(res);
-                }
-              }
-            );
-        });
-      }
-  
-      delete(providerID){
-        return new Promise((resolve, reject) => {
-          mysqlConn.query("DELETE FROM provider WHERE id = ?", providerID, function(err, res) {
-              if (err) {
-                console.log("error: ", err);
-                reject(err);
-              } else {
-                resolve(res);
-              }
-            });
+  create(provider) {
+    return new Promise((resolve, reject) => {
+      mysqlConn.query("INSERT INTO provider set ?", provider, (err, res) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(provider);
+        }
       });
-      }
+    });
+  }
+  
+  getAll() {
+    return new Promise((resolve, reject) => {
+      mysqlConn.query("Select * from provider", (err, res) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(res);
+        }
+      });
+    });
+  }
 
 
 
+  getById(providerId) {
+    return new Promise((resolve, reject) => {
+      mysqlConn.query(
+        "Select * from provider where id = ?",
+        providerId,
+        (err, res) => {
+          if (err) {
+            console.log("error: ", err);
+            reject(err);
+          } else {
+            resolve(res);
+          }
+        }
+      );
+    });
+  }
 
+  updateById(providerId, provider) {
+    return new Promise((resolve, reject) => {
+      mysqlConn.query(
+        "UPDATE provider SET name = ?, email = ?, password = ?, WHERE id = ?",
+        [
+          provider.name,
+          provider.email,
+          provider.password,
+          providerId
+        ],
+        (err, res) => {
+          if (err) {
+            console.log("error: ", err);
+            reject(err);
+          } else {
+            resolve(res);
+          }
+        }
+      );
+    });
+  }
+
+  delete(providerId) {
+    return new Promise((resolve, reject) => {
+      mysqlConn.query(
+        "DELETE FROM provider WHERE id = ?",
+        providerId,
+        (err, res) => {
+          if (err) {
+            console.log("error: ", err);
+            reject(err);
+          } else {
+            resolve(res);
+          }
+        }
+      );
+    });
+  }
 };

@@ -1,13 +1,17 @@
 const Provider = require("../models/provider-model.js");
-var bcrypt = require('bcryptjs');
+//var bcrypt = require('bcryptjs');
 
-var providerFound = 0;
+/* var providerFound = 0; */
+const roles = {
+  ADMIN: "admin",
+  PROVIDER: "provider",
+  USER: "user"
+};
 
-module.exports = class ProviderAuthService{
+module.exports = class ProviderAuthService {
+  constructor() {}
 
-    constructor() {}
-
-    hashPassword(password){
+  /*  hashPassword(password){
       const salt = bcrypt.genSaltSync(10);
       return bcrypt.hashSync(password, salt);
     }
@@ -91,4 +95,69 @@ module.exports = class ProviderAuthService{
           })
           });
       }
+}; */
+
+  login(authProvider) {
+    // get users
+    // loop through users find user by email (user.email ==req.body.email)
+    //validate the password (user.password ==req.body.password)
+    // if successful return the user
+    return new Promise((resolve, reject) => {
+      Provider.prototype
+        .getAll()
+        .then(providers => {
+          const dbProvider = providers.filter(provider => {
+            return provider.email == authProvider.email;
+          });
+
+          if (dbProvider.length > 0) {
+            if (dbProvider[0].password == authProvider.password) {
+              resolve(dbProvider[0]);
+            } else {
+              reject("incorrect password");
+            }
+          } else {
+            reject("provider not found");
+          }
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
+
+  register(provider) {
+    return new Promise((resolve, reject) => {
+      Provider.prototype
+        .getAll()
+        .then(dbProviders => {
+          dbProviders.forEach(existingProvider => {
+            if (existingProvider.email === provider.email) {
+              reject("This email address already been used");
+            }
+          });
+          provider.role = roles.PROVIDER;
+
+          const newProvider = new Provider(provider);
+          Provider.prototype
+            .create(newProvider)
+            .then(newProvider => {
+              Provider.prototype
+                .getByEmail(newProvider.email)
+                .then(res => {
+                  resolve(res[0]);
+                })
+                .catch(err => {
+                  reject(err);
+                });
+            })
+            .catch(err => {
+              reject(err);
+            });
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
 };

@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Listing = require("../models/listing-model.js");
 
-router.get("/", function (req, res) {
+router.get("/", (req, res) => {
     
     Listing.prototype
         .getAll()
@@ -14,7 +14,7 @@ router.get("/", function (req, res) {
         });
 });
 
-router.post("/", function (req, res) {
+router.post("/", (req, res) =>{
     
     Listing.prototype
         .create(req.body)
@@ -26,7 +26,7 @@ router.post("/", function (req, res) {
         });
 });
 
-router.get("/getByID/:id", function (req, res) {
+router.get("/getByID/:id", (req, res) =>{
     
     Listing.prototype
         .getByID(parseInt(req.params.id))
@@ -40,7 +40,7 @@ router.get("/getByID/:id", function (req, res) {
 
 
 
-router.get("/getByProviderID/:id", function (req, res) {
+router.get("/getByProviderID/:id", (req, res) => {
     
     Listing.prototype
         .getByProviderID(parseInt(req.params.id))
@@ -52,7 +52,7 @@ router.get("/getByProviderID/:id", function (req, res) {
         });
 });
 
-router.post("/updateByID", function (req, res) {
+router.post("/updateByID", (req, res) => {
     
     Listing.prototype
         .updateByID(req.body.id, req.body)
@@ -64,7 +64,7 @@ router.post("/updateByID", function (req, res) {
         });
 });
 
-router.post("/delete/:id", function (req, res) {
+router.post("/delete/:id", (req, res) => {
     
     Listing.prototype
         .delete(parseInt(req.params.id))

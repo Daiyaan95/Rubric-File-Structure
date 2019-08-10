@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Booking = require("../models/booking-model.js");
 
-router.get("/", function (req, res) {
+router.get("/", (req, res) => {
     Booking.prototype
         .getAll()
         .then(booking => {
@@ -13,7 +13,7 @@ router.get("/", function (req, res) {
         });
 });
 
-router.post("/", function (req, res) {
+router.post("/", (req, res) => {
         Booking.prototype
         .create(req.body)
         .then(booking => {
@@ -24,7 +24,7 @@ router.post("/", function (req, res) {
         });
 });
 
-router.get("/getByID/:id", function (req, res) {
+router.get("/getByID/:id", (req, res) => {
     
     Booking.prototype
         .getByID(parseInt(req.params.id))
@@ -36,7 +36,7 @@ router.get("/getByID/:id", function (req, res) {
         });
 });
 
-router.get("/getByUserID/:id", function (req, res) {
+router.get("/getByUserID/:id", (req, res) =>{
     
     Booking.prototype
         .getByUserID(parseInt(req.params.id))
@@ -48,7 +48,7 @@ router.get("/getByUserID/:id", function (req, res) {
         });
 });
 
-router.get("/getByListingID/:id", function (req, res) {
+router.get("/getByListingID/:id", (req, res) => {
     
     Booking.prototype
         .getByListingID(parseInt(req.params.id))
@@ -60,7 +60,7 @@ router.get("/getByListingID/:id", function (req, res) {
         });
 });
 
-router.post("/updateByID", function (req, res) {
+router.post("/updateByID", (req, res) => {
     
     Booking.prototype
         .updateByID(req.body.bookingID, req.body)
@@ -72,7 +72,7 @@ router.post("/updateByID", function (req, res) {
         });
 });
 
-router.post("/delete:id", function (req, res) {
+router.post("/delete:id", (req, res) => {
     
     Booking.prototype
         .delete(parseInt(req.params.id))
@@ -84,7 +84,7 @@ router.post("/delete:id", function (req, res) {
         });
 });
 
-router.post("/deleteByListingID/:id", function (req, res) {
+router.post("/deleteByListingID/:id", (req, res) => {
     
     Booking.prototype
         .deleteByListingID(parseInt(req.params.id))

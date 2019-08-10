@@ -1,5 +1,11 @@
 const User = require("../models/user-model");
 
+const roles = {
+  ADMIN: "admin",
+  PROVIDER: "provider",
+  USER: "user"
+};
+
 module.exports = class AuthService {
   constructor() {}
 
@@ -10,101 +16,60 @@ module.exports = class AuthService {
     // if successful return the user
     return new Promise((resolve, reject) => {
       User.prototype
-        .getUsers()
+        .getAll()
         .then(users => {
           const dbUser = users.filter(user => {
             return user.email == authUser.email;
           });
 
-          if (dbUser) {
+          if (dbUser.length > 0) {
             if (dbUser[0].password == authUser.password) {
-              res.send(dbUser[0]);
+              resolve(dbUser[0]);
             } else {
-              res.status(400).send("incorrect password");
+              reject("incorrect password");
             }
           } else {
-            res.status(400).send("user not found");
+            reject("user not found");
           }
         })
         .catch(err => {
-          res.status(400).send(err);
+          reject(err);
         });
     });
   }
-};
-
-var fs = require("fs");
-
-const roles = {
-  ADMIN: "admin",
-  PROVIDER: "provider",
-  USER: "user"
-};
-
-module.exports = class AuthService {
-  constructor() {}
 
   register(user) {
     return new Promise((resolve, reject) => {
-
-      fs.readFile("./src/data/data.json", function(err, data) {
-        if (err) reject(err);
-        var parseData = JSON.parse(data);
-
-        var count = 0;
-        parseData.users.forEach(existingUser => {
-          if (existingUser.email === user.email) {
-            reject("This email address already been used");
-          }
-          count++;
-        });
-
-        const userObj = {
-          id: (count + 1).toString(),
-          name: user.name,
-          surname: user.surname,
-          cellPhone: user.cellPhone,
-          email: user.email,
-          password: user.password,
-          role: roles.USER
-        };
-
-        const newUser = new User(userObj);
-        parseData.users.push(newUser);
-
-        fs.writeFile("./src/data/data.json", JSON.stringify(parseData), function(err) {
-          if (err) reject(err);
-          resolve(res);
-        });
-      });
-
-    });
-  }
-
-  async login(user) {
-    return new Promise((resolve, reject) => {
-    
-      var found = false;
-      fs.readFile("./src/data/data.json", function(err, data) {
-        if (err) reject(err);
-        var parseData = JSON.parse(data);
-        parseData.users.forEach(existingUser => {
-          if (existingUser.email === user.email) {
-            found = true;
-          }
-          if (found) {
-            if (existingUser.name !== user.name) {
-              reject("Incorrect username");
-            } else if (existingUser.password !== user.password) {
-              reject("Incorrect password");
-            } else {
-              resolve(user);
+      User.prototype
+        .getAll()
+        .then(dbUsers => {
+          dbUsers.forEach(existingUser => {
+            if (existingUser.email === user.email) {
+              reject("This email address already been used");
             }
-          } else {
-            reject("User not found");
-          }
+          });
+          user.role = roles.USER;
+
+          const newUser = new User(user);
+          User.prototype
+            .create(newUser)
+            .then(newUser => {
+              User.prototype
+                .getByEmail(newUser.email)
+                .then(res => {
+                  resolve(res[0]);
+                })
+                .catch(err => {
+                  reject(err);
+                });
+            })
+            .catch(err => {
+              reject(err);
+            });
+        })
+        .catch(err => {
+          reject(err);
         });
-      });
     });
   }
 };
